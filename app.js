@@ -4,14 +4,19 @@ const handlebars = require('express-handlebars')
 const bodyParser = require("body-parser")
 const app = express()
 const admin = require('./routes/admin')
+const path = require('path')
+
 //Configurações
     //Body Parser
-    app.use(bodyParser.urlencoded({extended: false}))
-    app.use(bodyParser.json())
+        app.use(bodyParser.urlencoded({extended: false}))
+        app.use(bodyParser.json())
     //Handeblars
-    app.engine('handlebars',handlebars.engine({defaultLayout:'main'}))
-    app.set('view engine','handlebars')
+        app.engine('handlebars',handlebars.engine({defaultLayout:'main', layoutsDir:path.join(__dirname, 'views/layout')}))
+        app.set('view engine','handlebars')
     //Sequilize
+        //Em breve
+    //Public
+        app.use(express.static(path.join(__dirname,"public")))
 //Rotas
     app.get('/', (req,res) =>{
         res.send("Rota principal")
