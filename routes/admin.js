@@ -25,8 +25,9 @@ router.post('/categorias/nova',(req,res)=>{
         slug: req.body.slug
     }).then(function(){
         res.redirect("/")
+        console.log("Categoria salva com sucesso")
     }).catch(function(erro){
-        res.send("Houve um erro:", erro)
+        console.log("Houve um erro: " + erro);
     })
     
 })
