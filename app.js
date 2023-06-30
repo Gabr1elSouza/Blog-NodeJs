@@ -5,7 +5,10 @@ const bodyParser = require("body-parser")
 const app = express()
 const admin = require('./routes/admin')
 const path = require('path')
-
+const Sequelize = require("sequelize")
+const sequelize = new Sequelize('blogweb','root','Savitar18',{
+    host: "localhost", dialect: 'mysql'
+})
 //Configurações
     //Body Parser
         app.use(bodyParser.urlencoded({extended: false}))
@@ -13,8 +16,12 @@ const path = require('path')
     //Handeblars
         app.engine('handlebars',handlebars.engine({defaultLayout:'main', layoutsDir:path.join(__dirname, 'views/layout')}))
         app.set('view engine','handlebars')
-    //Sequilize
-        //Em breve
+    //Sequelize
+    sequelize.authenticate().then(function(){
+        console.log("Conectado com sucesso")
+    }).catch(function(erro){
+        console.log("Falha ao se conectar: "+erro)
+    })
     //Public
         app.use(express.static(path.join(__dirname,"public")))
 //Rotas
