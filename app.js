@@ -9,7 +9,29 @@ const Sequelize = require("sequelize")
 const sequelize = new Sequelize('blogweb','root','Savitar18',{
     host: "localhost", dialect: 'mysql'
 })
+const session = require('express-session')
+const flash = require('connect-flash')
+
 //Configurações
+
+    //Sessão
+    app.use(session({
+        secret: "cursodenode",
+        resave: true,
+        saveUninitialized: true
+    }))
+
+    app.use(flash())
+
+    //Middlaware
+    
+        app.use((req,res,next)=>{
+            res.locals.success_msg = req.flash("success_msg")
+            res.locals.error_msg = req.flash("error_msg")
+            next()
+        })
+        
+
     //Body Parser
         app.use(bodyParser.urlencoded({extended: false}))
         app.use(bodyParser.json())
@@ -24,6 +46,8 @@ const sequelize = new Sequelize('blogweb','root','Savitar18',{
     })
     //Public
         app.use(express.static(path.join(__dirname,"public")))
+
+        
 //Rotas
     app.get('/', (req,res) =>{
         res.send("Rota principal")
