@@ -36,7 +36,10 @@ const flash = require('connect-flash')
         app.use(bodyParser.urlencoded({extended: false}))
         app.use(bodyParser.json())
     //Handeblars
-        app.engine('handlebars',handlebars.engine({defaultLayout:'main', layoutsDir:path.join(__dirname, 'views/layout')}))
+        app.engine('handlebars',handlebars.engine({defaultLayout:'main',runtimeOptions: {
+            allowProtoPropertiesByDefault: true,
+            allowProtoMethodsByDefault: true,
+        }, layoutsDir:path.join(__dirname, 'views/layout')}))
         app.set('view engine','handlebars')
     //Sequelize
     sequelize.authenticate().then(function(){
