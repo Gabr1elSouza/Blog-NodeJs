@@ -18,7 +18,7 @@ router.get('/posts',(req,res) =>{
 
 })
 
-//route for list category
+//route for listing category
 router.get('/categorias',(req,res) =>{
     //listagem de categorias
     Categoria.findAll({}).then(function(categorias){
@@ -74,7 +74,7 @@ router.get('/categorias/add',(req,res) =>{
 
 })
 
-//Route for list with paraments
+//Route for edit with paraments
 router.get("/categorias/edit/:id", (req, res) => {
     //listando por meio do id
     Categoria.findOne({
@@ -133,6 +133,17 @@ router.post("/categorias/edit",(req, res)=>{
         res.redirect("/admin/categorias")
     })
 }
+})
+
+router.post("/categorias/deletar", (req,res)=>{
+    Categoria.destroy({where: {id: req.body.id}
+    }).then(()=>{
+        req.flash("success_msg", "Categoria deletada com sucesso")
+        res.redirect("/admin/categorias")
+    }).catch((err)=>{
+        req.flash("error_msg", "Houve um erro ao deletar categoria")
+        res.redirect("/admin/categorias")
+    })
 })
 //exportação para o arquivo principal
 module.exports = router
