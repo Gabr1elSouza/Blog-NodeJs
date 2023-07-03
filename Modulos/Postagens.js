@@ -2,6 +2,7 @@ const Sequelize = require("sequelize")
 const sequelize = new Sequelize('blogweb','root','Savitar18',{
     host: "localhost", dialect: 'mysql'
 })
+const Categoria = require('./Categoria')
 
 const Postagem = sequelize.define('Postagem',{
     titulo:{
@@ -22,9 +23,6 @@ const Postagem = sequelize.define('Postagem',{
     },
     categoria:{
         type: Sequelize.INTEGER,
-        references:{
-            model:'Categoria',
-            key: 'id'},
         allowNull: false
     },
     data:{
@@ -33,6 +31,8 @@ const Postagem = sequelize.define('Postagem',{
     }
 
 });
+
+Postagem.belongsTo(Categoria, { foreignKey: 'categoria' });
 
 // Postagem.sync({force: true})
 module.exports = Postagem
