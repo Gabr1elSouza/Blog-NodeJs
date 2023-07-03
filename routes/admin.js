@@ -3,6 +3,7 @@ const express = require('express')
 const router = express.Router()
 const Sequelize = require("sequelize")
 const Categoria = require("../Modulos/Categoria")
+const Postagem = require("../Modulos/Postagens")
 const bodyParser = require('body-parser')
 
 //Configuration
@@ -142,6 +143,7 @@ router.post("/categorias/deletar", (req,res)=>{
         res.redirect("/admin/categorias")
     }).catch((err)=>{
         req.flash("error_msg", "Houve um erro ao deletar categoria")
+        console.log("erro: "+err)
         res.redirect("/admin/categorias")
     })
 })
@@ -159,6 +161,36 @@ router.get("/postagens/add", (req,res) =>{
     })
     
 
+})
+
+router.post("/postagens/nova", (req,res) => {
+
+    var erros =[]
+
+    if(req.body.categoria === 0){
+        erros.push({texto: "Categoria inválida, registre uma categoria"})
+    }
+
+    if(erros.length > 0){
+        res.render("admin/addpostagem", {erros:erros})
+    }else{
+        Postagem.create({
+            titulo: req.body.titulo,
+            descricao: req.body.descricao,
+            conteudo: req.body.conteudo,
+            slug: req.body.slug,
+            categoria: req.body.categoria,
+        }).then(function(){
+            req.flash("success_msg", "Postagem criada com sucesso")
+            res.redirect("/admin/postagens")
+            console.log("Postagem criada com sucesso salva com sucesso")
+        }).catch(function(err){
+            req.flash("error_msg", "Houve um problema no salvamento da postagem")
+            res.redirect("/admin/postagens")
+            console.log("erro: "+ err)
+        })
+    }
+    
 })
 
 //exportação para o arquivo principal
